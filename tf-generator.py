@@ -8,7 +8,7 @@ import os
 ##
 
 tosearch = 'var.'
-
+variables = []
 def open_file(filename):
 	with open(filename, 'r') as f:
 		return f.read()
@@ -16,10 +16,9 @@ def open_file(filename):
 ## This function will parse each line of the Terraform file and return a list of all the variables,
 ## the variables can be anywhere on the line
 def parse_variables(file):
-	variables = []
 	for line in file.splitlines():
 		if tosearch in line:
-			found = (line.split('var.')[1].split('}')[0])
+			found = (line.split(tosearch)[1].split('}')[0])
 			if found not in variables:
 				variables.append(found)
 	return variables
@@ -33,4 +32,4 @@ def print_variables(variables):
 for file in os.listdir(sys.argv[1]):
 	if file.endswith(".tf"):
 		variables = parse_variables(open_file(file))
-		print_variables(variables)
+print_variables(variables)
