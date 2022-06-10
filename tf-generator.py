@@ -1,6 +1,7 @@
 #!python
 import sys
 import os
+import re
 
 
 ## This script will read the Terraform files and create a list of all the variables
@@ -18,13 +19,16 @@ def open_file(filename):
 def parse_variables(file):
 	for line in file.splitlines():
 		if tosearch in line:
-			found = (line.split(tosearch)[1].split('}')[0])
+			# found = (line.split(tosearch)[1].split()[0] and line.split(tosearch)[1].split("}")[0])
+			found = (re.split('var.', line)[1]) 
+			found = (re.split(r"[^a-zA-Z0-9\s]", found)[0])
 			if found not in variables:
 				variables.append(found)
 	return variables
 
 ## This function will print the variable file to the screen
 def print_variables(variables):
+	variables.sort()
 	for variable in variables:
 		print(f"variable {variable} {{}}")
 
